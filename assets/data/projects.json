@@ -1,0 +1,20 @@
+[
+  {
+    "date": "2025-01-01",
+    "title": "Project 1",
+    "technologies": ["HTML", "CSS", "JavaScript"],
+    "description": "This is a description for Project 1.",
+    "liveLink": "http://example.com/live",
+    "githubLink": "http://github.com/example/project1",
+    "image": "/assets/images/dummy.png"
+  },
+  {
+    "date": "2025-02-01",
+    "title": "Project 2",
+    "technologies": ["React", "NodeJS"],
+    "description": "This is a description for Project 2.",
+    "liveLink": "http://example.com/live2",
+    "githubLink": "http://github.com/example/project2",
+    "image": "/assets/images/dummy.png"
+  }
+]

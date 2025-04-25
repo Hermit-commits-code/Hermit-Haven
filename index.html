@@ -85,95 +85,38 @@
       </section>
       <section>
         <h2>Projects</h2>
-        <div class="cards-grid">
-          <div class="project-card">
-            <div>
-              <p>Date: xx-xx-xxxx</p>
-              <h4>Project Name</h4>
-              <div class="tech-list">
-                <div class="card-button-secondary">
-                  <p>Technology 1</p>
-                </div>
-                <div class="card-button-secondary">
-                  <p>Technology 2</p>
-                </div>
-                <div class="card-button-secondary">
-                  <p>Technology 3</p>
-                </div>
-              </div>
-              <p>Description</p>
-              <div class="project-links">
-                <a target="_blank" href="/">Live</a>
-                <a target="_blank" href="/">Github</a>
-              </div>
-            </div>
-            <div class="img-div">
-              <img
-                class="big-img"
-                src="/public/dummy_600x400_ffffff_cccccc.png"
-                alt="Project Image"
-              />
-            </div>
-          </div>
-          <div class="project-card">
-            <div>
-              <p>Date: xx-xx-xxxx</p>
-              <h4>Project Name</h4>
-              <div class="tech-list">
-                <div class="card-button-secondary">
-                  <p>Technology 1</p>
-                </div>
-                <div class="card-button-secondary">
-                  <p>Technology 2</p>
-                </div>
-                <div class="card-button-secondary">
-                  <p>Technology 3</p>
-                </div>
-              </div>
-              <p>Description</p>
-              <div class="project-links">
-                <a target="_blank" href="/">Live</a>
-                <a target="_blank" href="/">Github</a>
-              </div>
-            </div>
-            <div class="img-div">
-              <img
-                class="big-img"
-                src="/public/dummy_600x400_ffffff_cccccc.png"
-                alt="Project Image"
-              />
-            </div>
-          </div>
-          <div class="project-card">
-            <div>
-              <p>Date: xx-xx-xxxx</p>
-              <h4>Project Name</h4>
-              <div class="tech-list">
-                <div class="card-button-secondary">
-                  <p>Technology 1</p>
-                </div>
-                <div class="card-button-secondary">
-                  <p>Technology 2</p>
-                </div>
-                <div class="card-button-secondary">
-                  <p>Technology 3</p>
-                </div>
-              </div>
-              <p>Description</p>
-              <div class="project-links">
-                <a target="_blank" href="/">Live</a>
-                <a target="_blank" href="/">Github</a>
-              </div>
-            </div>
-            <div class="img-div">
-              <img
-                class="big-img"
-                src="/public/dummy_600x400_ffffff_cccccc.png"
-                alt="Project Image"
-              />
-            </div>
-          </div>
+        <div id="tech-filter" class="tech-filter">
+          <img class="tech-icon" src="assets/icons/html5.svg" alt="HTML5" />
+          <img class="tech-icon" src="assets/icons/css.svg" alt="CSS3" />
+          <img class="tech-icon" src="assets/icons/javascript.svg" alt="JS" />
+          <img class="tech-icon" src="assets/icons/git.svg" alt="Git" />
+          <img class="tech-icon" src="assets/icons/react.svg" alt="React" />
+          <img
+            class="tech-icon"
+            src="assets/icons/nextdotjs.svg"
+            alt="NextJS"
+          />
+          <img
+            class="tech-icon"
+            src="assets/icons/express.svg"
+            alt="ExpressJS"
+          />
+          <img class="tech-icon" src="assets/icons/python.svg" alt="Python" />
+          <img class="tech-icon" src="assets/icons/django.svg" alt="Django" />
+          <img
+            class="tech-icon"
+            src="assets/icons/firebase.svg"
+            alt="Firebase"
+          />
+          <img
+            class="tech-icon"
+            src="assets/icons/postgresql.svg"
+            alt="PostgreSQL"
+          />
+          <img class="tech-icon" src="assets/icons/mysql.svg" alt="MySQL" />
+          <!-- etc -->
         </div>
+        <div id="projects-container" class="cards-grid"></div>
       </section>
     </main>
     <footer>
@@ -182,5 +125,165 @@
         <a target="_blank" href="">Github</a>
       </p>
     </footer>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // Elements for displaying projects and tech icons
+        const projectsContainer = document.getElementById('projects-container');
+        const techIcons = document.querySelectorAll('.tech-icon');
+
+        let lastClicked = null;
+
+        // Fetch the project data from the JSON file
+        fetch('assets/data/projects.json')
+          .then((response) => response.json())
+          .then((projects) => {
+            console.log('Fetched projects:', projects); // Log the fetched data to check its structure
+
+            if (Array.isArray(projects)) {
+              // Populate the project cards
+              projects.forEach((project) => {
+                const projectCard = document.createElement('div');
+                projectCard.classList.add('project-card');
+                projectCard.setAttribute(
+                  'data-tech',
+                  project.technologies.join(','),
+                );
+
+                const cardContent = `
+                  <div>
+                    <p>Date: ${project.date}</p>
+                    <h4>${project.title}</h4>
+                    <div class="tech-list">
+                      ${project.technologies
+                        .map(
+                          (tech) =>
+                            `<div class="card-button-secondary"><p>${tech}</p></div>`,
+                        )
+                        .join('')}
+                    </div>
+                    <p>${project.description}</p>
+                    <div class="project-links">
+                      <a target="_blank" href="${project.liveLink}">Live</a>
+                      <a target="_blank" href="${project.githubLink}">Github</a>
+                    </div>
+                  </div>
+                  <div class="img-div">
+                    <img class="big-img" src="${project.image}" alt="${
+                  project.title
+                } Image" />
+                  </div>
+                `;
+
+                projectCard.innerHTML = cardContent;
+                projectsContainer.appendChild(projectCard);
+              });
+            } else {
+              console.error('Fetched data is not an array:', projects);
+            }
+
+            // Add filter functionality
+            techIcons.forEach((icon) => {
+              icon.addEventListener('click', () => {
+                const tech = icon.alt.trim();
+                const cards = document.querySelectorAll('.project-card');
+
+                if (lastClicked === tech) {
+                  // Reset filter
+                  cards.forEach((card) => (card.style.display = 'flex'));
+                  lastClicked = null;
+                } else {
+                  cards.forEach((card) => {
+                    const techList = card.getAttribute('data-tech');
+                    card.style.display = techList.includes(tech)
+                      ? 'flex'
+                      : 'none';
+                  });
+                  lastClicked = tech;
+                }
+              });
+            });
+          })
+          .catch((error) => {
+            console.error('Error loading projects:', error);
+          });
+      });
+
+      const projectsContainer = document.getElementById('projects-container');
+      const techIcons = document.querySelectorAll('.tech-icon');
+      let lastClicked = null;
+
+      // Fetch projects from the JSON file
+      fetch('assets/data/projects.json')
+        .then((response) => response.json())
+        .then((projects) => {
+          console.log('Fetched projects:', projects); // Log the fetched data
+          // Populate the project cards
+          projects.forEach((project) => {
+            const projectCard = document.createElement('div');
+            projectCard.classList.add('project-card');
+            projectCard.setAttribute(
+              'data-tech',
+              project.technologies.join(','),
+            );
+
+            const cardContent = `
+                                  <div>
+                                      <p>Date: ${project.date}</p>
+                                      <h4>${project.title}</h4>
+                                      <div class="tech-list">
+                                          ${project.technologies
+                                            .map(
+                                              (tech) =>
+                                                `<div class="card-button-secondary"><p>${tech}</p></div>`,
+                                            )
+                                            .join('')}
+                                      </div>
+                                      <p>${project.description}</p>
+                                      <div class="project-links">
+                                          <a target="_blank" href="${
+                                            project.liveLink
+                                          }">Live</a>
+                                          <a target="_blank" href="${
+                                            project.githubLink
+                                          }">Github</a>
+                                      </div>
+                                  </div>
+                                  <div class="img-div">
+                                      <img class="big-img" src="${
+                                        project.image
+                                      }" alt="${project.title} Image" />
+                                  </div>
+                              `;
+
+            projectCard.innerHTML = cardContent;
+            projectsContainer.appendChild(projectCard);
+          });
+
+          // Add filter functionality
+          techIcons.forEach((icon) => {
+            icon.addEventListener('click', () => {
+              const tech = icon.alt.trim();
+              const cards = document.querySelectorAll('.project-card');
+
+              if (lastClicked === tech) {
+                // Reset filter
+                cards.forEach((card) => (card.style.display = 'flex'));
+                lastClicked = null;
+              } else {
+                cards.forEach((card) => {
+                  const techList = card.getAttribute('data-tech');
+                  card.style.display = techList.includes(tech)
+                    ? 'flex'
+                    : 'none';
+                });
+                lastClicked = tech;
+              }
+            });
+          });
+        })
+        .catch((error) => {
+          console.error('Error loading projects:', error);
+        });
+    </script>
   </body>
 </html>

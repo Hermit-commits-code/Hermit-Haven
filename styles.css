@@ -90,6 +90,32 @@ section {
   padding-top: 0.5rem;
 }
 
+/* 🔧 Updated Tech Icons Style */
+.tech-icon {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+  border-radius: 6px;
+  padding: 6px;
+  background-color: #f9f9f9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tech-icon:hover {
+  transform: scale(1.1);
+  background-color: #e2e8f0;
+}
+
+/* 🔧 Layout container for the icons */
+#tech-filter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 2rem;
+}
+
 .tech-list {
   display: flex;
   align-items: center;
